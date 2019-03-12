@@ -215,10 +215,11 @@ class Query(object):
         if alias:
             return alias.adapt_clause(element)
 
-    def _adapt_col_list(self, cols):
+    def _adapt_col_list(self, cols, allow_coercion_to_text=True):
         return [
             self._adapt_clause(
-                expression._literal_as_text(o),
+                expression._literal_as_text(
+                    o, allow_coercion_to_text=allow_coercion_to_text),
                 True, True)
             for o in cols
         ]
@@ -1477,7 +1478,7 @@ class Query(object):
                 self._order_by = None
                 return
 
-        criterion = self._adapt_col_list(criterion)
+        criterion = self._adapt_col_list(criterion, allow_coercion_to_text=False)
 
         if self._order_by is False or self._order_by is None:
             self._order_by = criterion
@@ -1490,7 +1491,7 @@ class Query(object):
         the newly resulting :class:`.Query`"""
 
         criterion = list(chain(*[_orm_columns(c) for c in criterion]))
-        criterion = self._adapt_col_list(criterion)
+        criterion = self._adapt_col_list(criterion, allow_coercion_to_text=False)
 
         if self._group_by is False:
             self._group_by = criterion

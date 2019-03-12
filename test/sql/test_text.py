@@ -52,7 +52,7 @@ class SelectCompositionTest(fixtures.TestBase, AssertsCompiledSQL):
         s.append_column("column2")
         s.append_whereclause("column1=12")
         s.append_whereclause("column2=19")
-        s = s.order_by("column1")
+        s = s.order_by(text("column1"))
         s.append_from("table1")
         self.assert_compile(s, "SELECT column1, column2 FROM table1 WHERE "
                             "column1=12 AND column2=19 ORDER BY column1")
@@ -125,6 +125,32 @@ class SelectCompositionTest(fixtures.TestBase, AssertsCompiledSQL):
             "FROM mytable, myothertable WHERE foo.id = foofoo(lala) AND "
             "datetime(foo) = Today AND mytable.myid = myothertable.otherid")
 
+
+    def test_order_by_no_string_coercion(self):
+        assert_raises_message(
+            exc.ArgumentError,
+            "Textual SQL expression 'foo' should be explicitly declared",
+            select([table1]).order_by, "foo"
+        )
+
+        assert_raises_message(
+            exc.ArgumentError,
+            "Textual SQL expression 'foo' should be explicitly declared",
+            select, [table1], order_by="foo"
+        )
+
+    def test_group_by_no_string_coercion(self):
+        assert_raises_message(
+            exc.ArgumentError,
+            "Textual SQL expression 'foo' should be explicitly declared",
+            select([table1]).group_by, "foo"
+        )
+
+        assert_raises_message(
+            exc.ArgumentError,
+            "Textual SQL expression 'foo' should be explicitly declared",
+            select, [table1], group_by="foo"
+        )
 
 class BindParamTest(fixtures.TestBase, AssertsCompiledSQL):
     __dialect__ = 'default'

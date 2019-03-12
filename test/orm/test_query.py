@@ -652,8 +652,15 @@ class InvalidGenerationsTest(QueryTest, AssertsCompiledSQL):
 
             q.enable_assertions(False).join("addresses")
             q.enable_assertions(False).filter(User.name == 'ed')
-            q.enable_assertions(False).order_by('foo')
-            q.enable_assertions(False).group_by('foo')
+            q.enable_assertions(False).order_by(text('foo'))
+            q.enable_assertions(False).group_by(text('foo'))
+
+    def test_no_textual_order_by_group_by(self):
+        User = self.classes.User
+
+        s = create_session()
+        assert_raises(sa_exc.ArgumentError, s.query(User).order_by, "foo")
+        assert_raises(sa_exc.ArgumentError, s.query(User).group_by, "foo")
 
     def test_no_from(self):
         users, User = self.tables.users, self.classes.User
@@ -1349,7 +1356,8 @@ class ExpressionTest(QueryTest, AssertsCompiledSQL):
         q2 = s.query(User).filter(User.name == 'fred').with_labels()
         eq_(
             s.query(User).from_statement(union(q1, q2).
-            order_by('users_name')).all(), [User(name='ed'), User(name='fred')]
+            order_by(text('users_name'))).all(),
+            [User(name='ed'), User(name='fred')]
         )
 
     def test_select(self):
@@ -1890,8 +1898,8 @@ class SetOpsTest(QueryTest, AssertsCompiledSQL):
         )
 
         for q in (
-                q3.order_by(User.id, "anon_1_param_1"),
-                q6.order_by(User.id, "foo")):
+                q3.order_by(User.id, text("anon_1_param_1")),
+                q6.order_by(User.id, text("foo"))):
             eq_(
                 q.all(),
                 [
@@ -2377,7 +2385,8 @@ class TextTest(QueryTest):
         s = create_session()
         eq_(
             s.query(User).from_statement(
-                select(['id', 'name']).select_from('users').order_by('id'),
+                select(['id', 'name']).
+                select_from('users').order_by(text('id')),
             ).all(),
             [User(id=7), User(id=8), User(id=9), User(id=10)]
         )

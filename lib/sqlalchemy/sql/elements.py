@@ -1697,13 +1697,15 @@ class ClauseList(ClauseElement):
         self.operator = kwargs.pop('operator', operators.comma_op)
         self.group = kwargs.pop('group', True)
         self.group_contents = kwargs.pop('group_contents', True)
+        allow_coercion_to_text = kwargs.pop("allow_coercion_to_text", True)
         if self.group_contents:
             self.clauses = [
-                _literal_as_text(clause).self_group(against=self.operator)
+                _literal_as_text(clause, allow_coercion_to_text).self_group(
+                    against=self.operator)
                 for clause in clauses]
         else:
             self.clauses = [
-                _literal_as_text(clause)
+                _literal_as_text(clause, allow_coercion_to_text)
                 for clause in clauses]
 
     def __iter__(self):
@@ -3445,19 +3447,33 @@ def _clause_element_as_expr(element):
         return element
 
 
-def _literal_as_text(element):
+def _literal_as_text(element, allow_coercion_to_text=True):
     if isinstance(element, Visitable):
         return element
     elif hasattr(element, '__clause_element__'):
         return element.__clause_element__()
     elif isinstance(element, util.string_types):
-        return TextClause(util.text_type(element))
+        if allow_coercion_to_text:
+            return TextClause(util.text_type(element))
+        else:
+            _no_text_coercion(element)
     elif isinstance(element, (util.NoneType, bool)):
         return _const_expr(element)
     else:
         raise exc.ArgumentError(
             "SQL expression object or string expected."
         )
+
+
+def _no_text_coercion(element, exc_cls=exc.ArgumentError, extra=None):
+    raise exc_cls(
+        "%(extra)sTextual SQL expression %(expr)r should be "
+        "explicitly declared as text(%(expr)r)"
+        % {
+            "expr": util.ellipses_string(element),
+            "extra": "%s " % extra if extra else "",
+        }
+    )
 
 
 def _no_literals(element):

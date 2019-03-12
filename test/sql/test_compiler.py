@@ -1549,13 +1549,13 @@ class SelectTest(fixtures.TestBase, AssertsCompiledSQL):
         # all DB's, are rendered if requested
         self.assert_compile(
             union(
-                s.order_by("foo"),
-                s.order_by("bar")),
+                s.order_by(text("foo")),
+                s.order_by(text("bar"))),
             "SELECT foo, bar ORDER BY foo UNION SELECT foo, bar ORDER BY bar")
         # self_group() is honored
         self.assert_compile(
-            union(s.order_by("foo").self_group(),
-                  s.order_by("bar").limit(10).self_group()),
+            union(s.order_by(text("foo")).self_group(),
+                  s.order_by(text("bar")).limit(10).self_group()),
             "(SELECT foo, bar ORDER BY foo) UNION (SELECT foo, "
             "bar ORDER BY bar LIMIT :param_1)",
             {'param_1': 10}

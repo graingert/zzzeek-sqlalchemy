@@ -321,18 +321,19 @@ class QueryTest(fixtures.TestBase):
 
         concat = ("test: " + users.c.user_name).label('thedata')
         eq_(
-            select([concat]).order_by("thedata").execute().fetchall(),
+            select([concat]).order_by(text("thedata")).execute().fetchall(),
             [("test: ed",), ("test: fred",), ("test: jack",)]
         )
 
         eq_(
-            select([concat]).order_by("thedata").execute().fetchall(),
+            select([concat]).order_by(text("thedata")).execute().fetchall(),
             [("test: ed",), ("test: fred",), ("test: jack",)]
         )
 
         concat = ("test: " + users.c.user_name).label('thedata')
         eq_(
-            select([concat]).order_by(desc('thedata')).execute().fetchall(),
+            select([concat]).order_by(
+                desc(text('thedata'))).execute().fetchall(),
             [("test: jack",), ("test: fred",), ("test: ed",)]
         )
 
@@ -1997,7 +1998,7 @@ class CompoundTest(fixtures.TestBase):
             select([t2.c.col3.label('col3'), t2.c.col4.label('col4')],
                    t2.c.col2.in_(["t2col2r2", "t2col2r3"]))
         )
-        u = union(s1, s2, order_by=['col3', 'col4'])
+        u = union(s1, s2, order_by=[text('col3'), text('col4')])
 
         wanted = [('aaa', 'aaa'), ('bbb', 'bbb'), ('bbb', 'ccc'),
                   ('ccc', 'aaa')]
@@ -2012,7 +2013,7 @@ class CompoundTest(fixtures.TestBase):
             select([t2.c.col3.label('col3'), t2.c.col4.label('col4')],
                    t2.c.col2.in_(["t2col2r2", "t2col2r3"]))
         )
-        u = union(s1, s2, order_by=['col3', 'col4'])
+        u = union(s1, s2, order_by=[text('col3'), text('col4')])
 
         wanted = [('aaa', 'aaa'), ('bbb', 'bbb'), ('bbb', 'ccc'),
                   ('ccc', 'aaa')]

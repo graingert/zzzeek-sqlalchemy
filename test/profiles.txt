@@ -270,28 +270,6 @@ test.aaa_profiling.test_orm.MergeBackrefsTest.test_merge_pending_with_all_pks 3.
 test.aaa_profiling.test_orm.MergeBackrefsTest.test_merge_pending_with_all_pks 3.3_sqlite_pysqlite_nocextensions 23143
 test.aaa_profiling.test_orm.MergeBackrefsTest.test_merge_pending_with_all_pks 3.4_sqlite_pysqlite_nocextensions 23145
 
-# TEST: test.aaa_profiling.test_orm.MergeTest.test_merge_load
-
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 2.6_sqlite_pysqlite_nocextensions 1521
-
-
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 2.7_mysql_mysqldb_cextensions 1388
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 2.7_mysql_mysqldb_nocextensions 1413
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 2.7_oracle_cx_oracle_nocextensions 1349
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 2.7_postgresql_psycopg2_cextensions 1296
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 2.7_postgresql_psycopg2_nocextensions 1321
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 2.7_sqlite_pysqlite_cextensions 1496
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 2.7_sqlite_pysqlite_nocextensions 1521
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 3.2_postgresql_psycopg2_nocextensions 1332
-
-
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 3.3_oracle_cx_oracle_nocextensions 1366
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 3.3_postgresql_psycopg2_cextensions 1358
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 3.3_postgresql_psycopg2_nocextensions 1357
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 3.3_sqlite_pysqlite_cextensions 1598
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 3.3_sqlite_pysqlite_nocextensions 1644
-test.aaa_profiling.test_orm.MergeTest.test_merge_load 3.4_sqlite_pysqlite_nocextensions 1644
-
 # TEST: test.aaa_profiling.test_orm.MergeTest.test_merge_no_load
 
 test.aaa_profiling.test_orm.MergeTest.test_merge_no_load 2.6_sqlite_pysqlite_nocextensions 122,18

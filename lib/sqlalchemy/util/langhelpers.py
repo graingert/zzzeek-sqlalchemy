@@ -1187,6 +1187,16 @@ def warn_exception(func, *args, **kwargs):
         warn("%s('%s') ignored" % sys.exc_info()[0:2])
 
 
+def ellipses_string(value, len_=25):
+    try:
+        if len(value) > len_:
+            return "%s..." % value[0:len_]
+        else:
+            return value
+    except TypeError:
+        return value
+
+
 def warn(msg, stacklevel=3):
     """Issue a warning.
 

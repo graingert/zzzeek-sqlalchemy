@@ -1590,9 +1590,11 @@ class GenerativeSelect(SelectBase):
         self._bind = bind
 
         if order_by is not None:
-            self._order_by_clause = ClauseList(*util.to_list(order_by))
+            self._order_by_clause = ClauseList(
+                *util.to_list(order_by), allow_coercion_to_text=False)
         if group_by is not None:
-            self._group_by_clause = ClauseList(*util.to_list(group_by))
+            self._group_by_clause = ClauseList(
+                *util.to_list(group_by), allow_coercion_to_text=False)
 
     @property
     def for_update(self):
@@ -1733,7 +1735,8 @@ class GenerativeSelect(SelectBase):
         else:
             if getattr(self, '_order_by_clause', None) is not None:
                 clauses = list(self._order_by_clause) + list(clauses)
-            self._order_by_clause = ClauseList(*clauses)
+            self._order_by_clause = ClauseList(
+                *clauses, allow_coercion_to_text=False)
 
     def append_group_by(self, *clauses):
         """Append the given GROUP BY criterion applied to this selectable.
@@ -1750,7 +1753,8 @@ class GenerativeSelect(SelectBase):
         else:
             if getattr(self, '_group_by_clause', None) is not None:
                 clauses = list(self._group_by_clause) + list(clauses)
-            self._group_by_clause = ClauseList(*clauses)
+            self._group_by_clause = ClauseList(
+                *clauses, allow_coercion_to_text=False)
 
 
 class CompoundSelect(GenerativeSelect):
